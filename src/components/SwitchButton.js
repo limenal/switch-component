@@ -165,17 +165,7 @@ class ConnectionBanner extends Component {
   switchNetwork = async() =>
   {
 
-    const CHAIN_PARAMS = {
-      chainId: '0x64', // A 0x-prefixed hexadecimal chainId
-      chainName: 'xDAI Chain',
-      nativeCurrency: {
-        name: 'xDAI',
-        symbol: 'xDAI',
-        decimals: 18
-      },
-      rpcUrls: ['https://dai.poa.network'],
-      blockExplorerUrls: ['https://blockscout.com/poa/xdai/']
-    } 
+    
     this.setState({isLoading: true}, function () {
       //console.log(this.state.isLoading);
     });
@@ -183,7 +173,7 @@ class ConnectionBanner extends Component {
       const res = await window.ethereum.request({ 
           method: 'wallet_addEthereumChain',
           params: [
-              CHAIN_PARAMS
+              this.props.chainParams
             ]
       });
       this.checkCorrectNetwork()
