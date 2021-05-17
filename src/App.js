@@ -4,17 +4,28 @@ import SwitchButton from './components/SwitchButton'
 import {ethers} from 'ethers'
 
 
+// const CHAIN_PARAMS = {
+//   chainId: '0x64', // A 0x-prefixed hexadecimal chainId
+//   chainName: 'xDAI Chain',
+//   nativeCurrency: {
+//     name: 'xDAI',
+//     symbol: 'xDAI',
+//     decimals: 18
+//   },
+//   rpcUrls: ['https://dai.poa.network'],
+//   blockExplorerUrls: ['https://blockscout.com/poa/xdai/']
+// } 
 const CHAIN_PARAMS = {
-  chainId: '0x64', // A 0x-prefixed hexadecimal chainId
-  chainName: 'xDAI Chain',
+  chainId: '0x89', // A 0x-prefixed hexadecimal chainId
+  chainName: 'Matic Mainnet',
   nativeCurrency: {
-    name: 'xDAI',
-    symbol: 'xDAI',
+    name: 'MATIC',
+    symbol: 'MATIC',
     decimals: 18
   },
-  rpcUrls: ['https://dai.poa.network'],
-  blockExplorerUrls: ['https://blockscout.com/poa/xdai/']
-} 
+  rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
+  blockExplorerUrls: ['https://explorer.matic.network/']
+}
 const mainButtonStyle = 
 {
   margin: 'auto',
@@ -28,7 +39,7 @@ const iconStyle =
 {
   margin: 'auto',
   position: 'absolute',
-  top: '-20px', left: '140px', bottom: '0', right: '0',
+  top: '-20px', left: '10px', bottom: '0', right: '0',
   
 };
 
@@ -85,8 +96,7 @@ class App extends Component
       content = 
       <div className = "wrapper">
           <SwitchButton currentNetwork={Number(this.state.currentID)}
-            requiredNetwork={100}
-            onWeb3Fallback={false}
+            requiredNetwork={Number(CHAIN_PARAMS.chainId)}
             iconStyle = {iconStyle}
             chainParams = {CHAIN_PARAMS}
             mainButtonStyle = {mainButtonStyle}

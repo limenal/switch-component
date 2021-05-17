@@ -130,7 +130,7 @@ class ConnectionBanner extends Component {
 
   
   state = {
-    isCorrectNetwork: false,
+    isCorrectNetwork: null,
     isModal: null,
     isMetaMaskConnected: false,
     isLoading: false,
@@ -282,8 +282,14 @@ class ConnectionBanner extends Component {
     });
   };
 
-  
-  
+  getRequiredAccount = () => {
+
+    if(this.state.isCorrectNetwork !== null)
+    {
+      return this.props.chainParams.chainName
+    }
+  }
+   
   render() {
     const { currentNetwork, requiredNetwork, onWeb3Fallback } = this.props;
     this.checkAccountChange()
@@ -353,7 +359,7 @@ class ConnectionBanner extends Component {
         </Modal>
         <div>
         <Button onClick={this.switchNetwork} style = {buttonModalStyle} mainColor={this.props.color}>
-          Switch to xDAI
+          Switch to {this.getRequiredAccount()}
         </Button>
         </div>
         
@@ -381,9 +387,7 @@ class ConnectionBanner extends Component {
                 {this.state.currentAccount}
 
               </Button.Outline>
-              {/* <Jazzicon diameter={20} seed={parseInt(this.state.currentAccount.toString().slice(8, this.state.currentAccount.toString().length))}
-              paperStyles = {this.props.iconStyle} 
-               /> */}
+              
             </div>
             
           ) : button}
