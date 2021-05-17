@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import RimbleUtils from '@rimble/utils';
 import PropTypes from 'prop-types';
 import {ethers} from 'ethers';
-import { Box, Flex, Icon, Text, MetaMaskButton, Flash, Button, Loader } from 'rimble-ui';
+import { MetaMaskButton,  Button, Loader } from 'rimble-ui';
 import './styles.css'
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
 
 
 const modalBackgroundlStyle = {
@@ -33,6 +33,8 @@ const buttonModalStyle = {
   borderRadius: '13px'
   
 };
+
+
 
 const loadingModalStyle = {
   margin: 'auto',
@@ -83,6 +85,18 @@ const ConnectWallet = ({
   );
 };
 
+const AccountButton = ({}) => 
+{
+  return(
+    <div>
+      {
+        <button> sdjasdiokasdas</button>
+
+      }
+    </div>
+
+  )
+};
 
 
 class ConnectionBanner extends Component {
@@ -90,7 +104,9 @@ class ConnectionBanner extends Component {
   static propTypes = {
     chainParams: PropTypes.object,
     currentNetwork: PropTypes.number,
-    
+    mainButtonStyle: PropTypes.object,
+    color: PropTypes.string,
+    iconStyle: PropTypes.object,
     requiredNetwork: PropTypes.number,
     onWeb3Fallback: PropTypes.bool,
     children: PropTypes.shape({
@@ -103,6 +119,8 @@ class ConnectionBanner extends Component {
     currentNetwork: null,
     requiredNetwork: null,
     onWeb3Fallback: false,
+    mainButtonStyle: null,
+    iconStyle: null,
     children: {
       notWeb3CapableBrowserMessage: null,
       noNetworkAvailableMessage: null,
@@ -117,7 +135,7 @@ class ConnectionBanner extends Component {
     isMetaMaskConnected: false,
     isLoading: false,
     isSetup: false,
-    currenAccount: '',
+    currentAccount: '',
     isWalletConnectionError:false
   };
   checkCorrectNetwork = () => {
@@ -132,8 +150,12 @@ class ConnectionBanner extends Component {
   };
 
   async componentDidMount() {
-    this.setState({isSetup:true})
-    this.isMetamaskConnected()
+    await this.isMetamaskConnected()
+    this.setState({
+      isSetup: true
+      
+    });
+    
   }
 
   requestAccounts = async() =>
@@ -146,13 +168,17 @@ class ConnectionBanner extends Component {
     if(!this.state.isMetaMaskConnected)
     {
       let accs = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+      this.setState({currentAccount: accs[0].toString()})
     }
+    
     this.setState({
       isLoading: false
     });
     this.setState({isLoading: false}, function () {
       //console.log(this.state.isLoading);
     });
+    this.setState({isModal: false})
     this.isMetamaskConnected()
     }catch(err){
       this.setState({isWalletConnectionError: true}, function () {
@@ -180,7 +206,6 @@ class ConnectionBanner extends Component {
       this.setState({isLoading: false}, function () {
         //console.log(this.state.isLoading);
       });
-      this.setState({isModal: false})
       this.checkCorrectNetwork()
     }catch(err){
       this.setState({isWalletConnectionError: true}, function () {
@@ -210,6 +235,11 @@ class ConnectionBanner extends Component {
 
     const isMetaMaskConnected = async () => {
         const accounts = await provider.listAccounts();
+        if(accounts.length> 0)
+        {
+          let acc = accounts[0].toString()
+          this.setState({currentAccount: acc.slice(0, 6) + '...' + acc.slice(acc.length - 4, acc.length)})
+        }
         return accounts.length > 0;
     }
     
@@ -228,6 +258,7 @@ class ConnectionBanner extends Component {
           
         }
     });
+    
   }
   
   async componentDidUpdate() {
@@ -289,29 +320,10 @@ class ConnectionBanner extends Component {
         >    
         </Modal>
 
-          <Loader style = {loadingModalStyle} color="#ff6b00" size ="40px"></Loader>
+          <Loader style = {loadingModalStyle} color={this.props.color} size ="40px"></Loader>
         </div>
       }
-      else if(this.state.isMetaMaskConnected)
-      {
-        button = <div>
-        <div onClick={this.closeModal}>
-          <ModalBackground ></ModalBackground>
-          
-        </div>
-        
-        <Modal 
-        >    
-        </Modal>
-        <div>
-        <Button onClick={this.switchNetwork} style = {buttonModalStyle} mainColor="#ff6b00">
-          Switch to xDAI
-        </Button>
-        </div>
-        
-        </div>
-      }
-      else 
+      else if(this.state.isCorrectNetwork)
       {
         button = <div>
         <div onClick={this.closeModal}>
@@ -328,14 +340,32 @@ class ConnectionBanner extends Component {
         
       </div>
       }
-      
+      else
+      {
+        button = <div>
+        <div onClick={this.closeModal}>
+          <ModalBackground ></ModalBackground>
+          
+        </div>
+        
+        <Modal 
+        >    
+        </Modal>
+        <div>
+        <Button onClick={this.switchNetwork} style = {buttonModalStyle} mainColor={this.props.color}>
+          Switch to xDAI
+        </Button>
+        </div>
+        
+        </div>
+      }
       
     }
     else{
       
       button = 
       <div>
-        <Button onClick={this.openModal} style = {buttonModalStyle} mainColor="#ff6b00">Connect to a wallet</Button>
+        <Button onClick={this.openModal} style = {this.props.mainButtonStyle} mainColor={this.props.color}>Connect to a wallet</Button>
         
       </div>
       
@@ -346,7 +376,16 @@ class ConnectionBanner extends Component {
       <div>
 
           {this.state.isMetaMaskConnected === true && this.state.isCorrectNetwork === true ? (
-            <Button variant="success" style = {buttonModalStyle}>Success!</Button>
+            <div> 
+              <Button.Outline style = {this.props.mainButtonStyle} mainColor={this.props.color} color ="black">
+                {this.state.currentAccount}
+
+              </Button.Outline>
+              {/* <Jazzicon diameter={20} seed={parseInt(this.state.currentAccount.toString().slice(8, this.state.currentAccount.toString().length))}
+              paperStyles = {this.props.iconStyle} 
+               /> */}
+            </div>
+            
           ) : button}
 
       
