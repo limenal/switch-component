@@ -58,6 +58,58 @@ const iconStyle =
 
 const COLOR_PARAM = "#ff6b00"
 
+const modalBackgroundStyle = {
+  position: 'fixed',
+  top: '0',
+  left: '0',
+  width: '100%',
+  height: '100%',
+  backgroundColor: 'rgba(0, 0, 0, 0.3)' 
+};
+
+const modalStyle = {
+  margin: 'auto',
+  position: 'absolute',
+  top: '0', left: '0', bottom: '0', right: '0',
+  width:'350px',
+  height: '200px',
+  background:'white',
+  borderRadius: '10px'
+};
+
+const buttonModalStyle = {
+  margin: 'auto',
+  position: 'absolute',
+  top: '0px', left: '0', bottom: '0', right: '0',
+  width: "250px",
+  borderRadius: '13px'
+  
+};
+
+
+const loadingModalStyle = {
+  margin: 'auto',
+  position: 'absolute',
+  top: '0px', left: '0', bottom: '0', right: '0',
+  width: "250px",
+  size: '150%',
+  borderRadius: '13px',
+  
+  
+};
+
+const errorModalStyle ={
+  margin: 'auto',
+  position: 'absolute',
+  top: '-90px', left: '0', bottom: '0', right: '0',
+  textAlign: 'center',
+  width:'350px',
+  height: '50px',
+  color: 'red',
+  borderRadius: '10px'
+}
+
+
 class App extends Component
 {
 
@@ -117,9 +169,13 @@ class App extends Component
           <SwitchButton 
             currentNetwork={Number(this.state.currentID)}
             requiredNetwork={Number(CHAIN_PARAMS.chainId)}
-            
             chainParams = {CHAIN_PARAMS}
             mainButtonStyle = {mainButtonStyle}
+            modalBackgroundStyle = {modalBackgroundStyle}
+            modalStyle = {modalStyle}
+            buttonModalStyle = {buttonModalStyle}
+            loadingModalStyle = {loadingModalStyle}
+            errorModalStyle = {errorModalStyle}
             color = {COLOR_PARAM}
           />
       </div>    

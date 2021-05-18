@@ -3,70 +3,18 @@ import PropTypes from 'prop-types';
 import {ethers} from 'ethers';
 import { MetaMaskButton,  Button, Loader } from 'rimble-ui';
 import './styles.css'
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon'
-import { ThemeConsumer } from 'styled-components';
-
-
-const modalBackgroundlStyle = {
-  position: 'fixed',
-  top: '0',
-  left: '0',
-  width: '100%',
-  height: '100%',
-  backgroundColor: 'rgba(0, 0, 0, 0.3)' 
-};
-
-const modalStyle = {
-  margin: 'auto',
-  position: 'absolute',
-  top: '0', left: '0', bottom: '0', right: '0',
-  width:'350px',
-  height: '200px',
-  background:'white',
-  borderRadius: '10px'
-};
-
-const buttonModalStyle = {
-  margin: 'auto',
-  position: 'absolute',
-  top: '0px', left: '0', bottom: '0', right: '0',
-  width: "250px",
-  borderRadius: '13px'
-  
-};
 
 
 
-const loadingModalStyle = {
-  margin: 'auto',
-  position: 'absolute',
-  top: '0px', left: '0', bottom: '0', right: '0',
-  width: "250px",
-  size: '150%',
-  borderRadius: '13px',
-  
-  
-};
 
-const errorModalStyle ={
-  margin: 'auto',
-  position: 'absolute',
-  top: '-90px', left: '0', bottom: '0', right: '0',
-  textAlign: 'center',
-  width:'350px',
-  height: '50px',
-  color: 'red',
-  borderRadius: '10px'
-}
-
-
-const ModalBackground = () =>(
-  <div style = {modalBackgroundlStyle}>
+const ModalBackground = ({modalBackgroundStyle}) =>{
+  return(
+  <div style = {modalBackgroundStyle}>
 
   </div>
-)
-
-const Modal = ({isMetaMaskConnected, isCorrectNetwork}
+  )
+}
+const Modal = ( {modalStyle}
 ) => {
   
   return (
@@ -75,60 +23,28 @@ const Modal = ({isMetaMaskConnected, isCorrectNetwork}
   );
 };
 
-
-
-const ConnectWallet = ({
-}) => {
-  return (
-    <div>
-      { 
-        <MetaMaskButton style = {buttonModalStyle}  >Connect MetaMask</MetaMaskButton>
-      }
-    </div>
-  );
-};
-
-const AccountButton = ({}) => 
-{
-  return(
-    <div>
-      {
-        <button> sdjasdiokasdas</button>
-
-      }
-    </div>
-
-  )
-};
-
-
 class ConnectionBanner extends Component {
   
   static propTypes = {
     chainParams: PropTypes.object,
     currentNetwork: PropTypes.number,
     mainButtonStyle: PropTypes.object,
+    modalBackgroundStyle: PropTypes.object,
+    modalStyle: PropTypes.object,
+    buttonModalStyle:PropTypes.object,
+    loadingModalStyle:PropTypes.object,
+    errorModalStyle: PropTypes.object,
     color: PropTypes.string,
     iconStyle: PropTypes.object,
     requiredNetwork: PropTypes.number,
-    onWeb3Fallback: PropTypes.bool,
-    children: PropTypes.shape({
-      notWeb3CapableBrowserMessage: PropTypes.node,
-      noNetworkAvailableMessage: PropTypes.node,
-      onWrongNetworkMessage: PropTypes.node,
-    }),
+    
   };
   static defaultProps = {
     currentNetwork: null,
     requiredNetwork: null,
-    onWeb3Fallback: false,
     mainButtonStyle: null,
-    iconStyle: null,
-    children: {
-      notWeb3CapableBrowserMessage: null,
-      noNetworkAvailableMessage: null,
-      onWrongNetworkMessage: null,
-    },
+    modalBackgroundlStyle: null,
+    modalStyle: null
   };
 
   
@@ -327,7 +243,6 @@ class ConnectionBanner extends Component {
   
 
   render() {
-    const { currentNetwork, requiredNetwork, onWeb3Fallback } = this.props;
     this.checkAccountChange()
     this.checkChainChange()
     let button
@@ -342,15 +257,15 @@ class ConnectionBanner extends Component {
       {
         button = <div>
           <div onClick={this.closeModal}>
-          <ModalBackground ></ModalBackground>
+          <ModalBackground modalBackgroundStyle = {this.props.modalBackgroundStyle}></ModalBackground>
           
         </div>
         
         <Modal 
-        >    
+        modalStyle = {this.props.modalStyle}>    
         </Modal>
 
-          <Loader style = {loadingModalStyle} color={this.props.color} size ="40px"></Loader>
+          <Loader style = {this.props.loadingModalStyle} color={this.props.color} size ="40px"></Loader>
         </div>
       }
       else if(this.state.isNetworkConnectionError)
@@ -358,17 +273,18 @@ class ConnectionBanner extends Component {
         button = <div>
 
         <div onClick={this.closeModal}>
-          <ModalBackground></ModalBackground>
+          <ModalBackground modalBackgroundStyle = {this.props.modalBackgroundStyle}></ModalBackground>
           
         </div>
 
         <Modal 
+        modalStyle = {this.props.modalStyle}    
         >    
         </Modal>
-        <Button onClick={this.switchNetwork} style = {buttonModalStyle} mainColor={this.props.color}>
+        <Button onClick={this.switchNetwork} style = {this.props.buttonModalStyle} mainColor={this.props.color}>
           Switch to {this.getRequiredNetwork()}
         </Button>
-        <div style ={errorModalStyle}>
+        <div style ={this.props.errorModalStyle}>
           <p >Connection cancelled</p>
         </div >
 
@@ -380,17 +296,18 @@ class ConnectionBanner extends Component {
          
 
           <div onClick={this.closeModal}>
-          <ModalBackground></ModalBackground>
+          <ModalBackground modalBackgroundStyle = {this.props.modalBackgroundStyle}></ModalBackground>
           
           </div>
 
         <Modal 
+        modalStyle = {this.props.modalStyle} 
         >    
         </Modal>
         <div onClick={this.requestAccounts}>
-          <ConnectWallet></ConnectWallet>
+        <MetaMaskButton style = {this.props.buttonModalStyle} >Connect MetaMask</MetaMaskButton>
         </div>
-        <div style ={errorModalStyle}>
+        <div style ={this.props.errorModalStyle}>
           <p >Connection cancelled</p>
         </div >
         
@@ -400,15 +317,16 @@ class ConnectionBanner extends Component {
       {
         button = <div>
         <div onClick={this.closeModal}>
-          <ModalBackground ></ModalBackground>
+          <ModalBackground modalBackgroundStyle = {this.props.modalBackgroundStyle}></ModalBackground>
 
         </div>
         
         <Modal 
+        modalStyle = {this.props.modalStyle} 
         >    
         </Modal>
         <a target="_blank" href = "https://metamask.io/">
-          <MetaMaskButton width={["100%", "auto"]} style = {buttonModalStyle}>
+          <MetaMaskButton width={["100%", "auto"]} style = {this.props.buttonModalStyle}>
             Install MetaMask
           </MetaMaskButton>
         </a>
@@ -421,15 +339,16 @@ class ConnectionBanner extends Component {
       {
         button = <div>
         <div onClick={this.closeModal}>
-          <ModalBackground ></ModalBackground>
+          <ModalBackground modalBackgroundStyle = {this.props.modalBackgroundStyle}></ModalBackground>
 
         </div>
         
         <Modal 
+        modalStyle = {this.props.modalStyle} 
         >    
         </Modal>
         <div onClick={this.requestAccounts}>
-          <ConnectWallet></ConnectWallet>
+          <MetaMaskButton style = {this.props.buttonModalStyle} >Connect MetaMask</MetaMaskButton>
         </div>
         
       </div>
@@ -438,15 +357,16 @@ class ConnectionBanner extends Component {
       {
         button = <div>
         <div onClick={this.closeModal}>
-          <ModalBackground></ModalBackground>
+          <ModalBackground modalBackgroundStyle = {this.props.modalBackgroundStyle}></ModalBackground>
           
         </div>
         
         <Modal 
+        modalStyle = {this.props.modalStyle} 
         >    
         </Modal>
         <div>
-        <Button onClick={this.switchNetwork} style = {buttonModalStyle} mainColor={this.props.color}>
+        <Button onClick={this.switchNetwork} style = {this.props.buttonModalStyle} mainColor={this.props.color}>
           Switch to {this.getRequiredNetwork()}
         </Button>
         </div>
