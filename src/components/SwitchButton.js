@@ -29,7 +29,7 @@ const modalStyle = {
 const buttonModalStyle = {
   margin: 'auto',
   position: 'absolute',
-  top: '80px', left: '0', bottom: '0', right: '0',
+  top: '0px', left: '0', bottom: '0', right: '0',
   width: "250px",
   borderRadius: '13px'
   
@@ -40,7 +40,7 @@ const buttonModalStyle = {
 const loadingModalStyle = {
   margin: 'auto',
   position: 'absolute',
-  top: '80px', left: '0', bottom: '0', right: '0',
+  top: '0px', left: '0', bottom: '0', right: '0',
   width: "250px",
   size: '150%',
   borderRadius: '13px',
@@ -51,7 +51,7 @@ const loadingModalStyle = {
 const errorModalStyle ={
   margin: 'auto',
   position: 'absolute',
-  top: '0px', left: '0', bottom: '0', right: '0',
+  top: '-90px', left: '0', bottom: '0', right: '0',
   textAlign: 'center',
   width:'350px',
   height: '50px',
