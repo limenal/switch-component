@@ -35,6 +35,19 @@ const mainButtonStyle =
   borderRadius: '13px'
 };
 
+// const mainButtonStyle = 
+// {
+  
+//   marginLeft:'auto',
+//   marginRight:'auto',
+//   position: 'relative',
+//   top:'500px',
+//   textAlign: 'center',
+//   display: 'block',
+//   width: "200px",
+//   borderRadius: '13px'
+// };
+
 const iconStyle = 
 {
   margin: 'auto',
@@ -56,12 +69,18 @@ class App extends Component
 
   foo = async() =>
   {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    let res = await provider.getNetwork()
-    let ID = res.chainId
-    
-    this.setState({currentID: ID.toString()}, function(){
-    })
+    const { ethereum } = window;
+    let provider
+    if (ethereum) {
+        provider = new ethers.providers.Web3Provider(ethereum);
+        this.setState({isMetaMaskInstalled: true})
+        let res = await provider.getNetwork()
+        let ID = res.chainId
+        
+        this.setState({currentID: ID.toString()}, function(){
+        })
+    }
+   
 
     this.setState({loading: false})
   }
@@ -94,10 +113,11 @@ class App extends Component
     }
     else{
       content = 
-      <div className = "wrapper">
-          <SwitchButton currentNetwork={Number(this.state.currentID)}
+      <div>
+          <SwitchButton 
+            currentNetwork={Number(this.state.currentID)}
             requiredNetwork={Number(CHAIN_PARAMS.chainId)}
-            iconStyle = {iconStyle}
+            
             chainParams = {CHAIN_PARAMS}
             mainButtonStyle = {mainButtonStyle}
             color = {COLOR_PARAM}
